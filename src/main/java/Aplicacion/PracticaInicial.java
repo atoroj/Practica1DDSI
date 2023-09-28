@@ -1,5 +1,7 @@
 package Aplicacion;
 
+import Controlador.ControladorLogin;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
@@ -11,6 +13,6 @@ package Aplicacion;
 public class PracticaInicial {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        ControladorLogin cLogin = new ControladorLogin();
     }
 }
