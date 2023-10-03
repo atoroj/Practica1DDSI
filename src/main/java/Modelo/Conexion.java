@@ -1,4 +1,3 @@
-
 package Modelo;
 
 import java.sql.*;
@@ -8,11 +7,15 @@ import java.sql.*;
  * @author Atoro
  */
 public class Conexion {
-
     private Connection conn = null;
 
     public Conexion(String sgbd, String ip, String service_bd, String usuario, String password) throws ClassNotFoundException, SQLException {
-        conn = DriverManager.getConnection("jdbc:oracle:thin:@172.17.20.39:1521:etsi", "DDSI_040","DDSI_040");
+        if (sgbd.equals("mariadb")) {
+            conn = DriverManager.getConnection("jdbc:" + sgbd + "://" + ip + "/" + service_bd, usuario, password);
+        } else {
+            conn = DriverManager.getConnection("jdbc:" + sgbd + ":thin:@" + ip + ":" + service_bd, usuario, password);
+        }
+        System.out.println("Conexion correcta");
     }
 
     public Connection getConexion() {
@@ -22,7 +25,11 @@ public class Conexion {
     public void desconexion() throws SQLException {
         if (conn != null) {
             conn.close();
+            System.out.println("Desconexion correcta");
         }
     }
-    //conn = DriverManager.getConnection("jdbc:oracle:thin:@172.17.20.39:1521:etsi", "DDSI_040","DDSI_040");
+    
+    public DatabaseMetaData informacionDB() throws SQLException{
+        return conn.getMetaData();
+    }
 }
