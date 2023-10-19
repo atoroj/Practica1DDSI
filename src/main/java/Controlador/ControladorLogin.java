@@ -35,7 +35,10 @@ public class ControladorLogin {
     private Conexion conectarDB() {
         try {
             String server = "mariadb";
+            //IP PARA MARIADB
             String ip = "172.18.1.241";
+            //IP PARA ORACLE
+            //String ip = "172.17.20.39:1521";
             String bd = "DDSI_040";
             String u = "DDSI_040";
             String p = "DDSI_040";

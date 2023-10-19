@@ -35,92 +35,49 @@ public class ControladorPrincipal {
     private void ejecutarCRUD() {
         socioDAO = new SocioDAO(this.conexion);
         String idSocio;
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("************************");
-        System.out.println("1.Listar Socios // 2.Añadir socio // 3.Eliminar socio // 4.Modificar socio // 5.Salir");
-        System.out.print("Introduce una funcion: ");
-        String op = scanner.nextLine();
-        switch (op) {
+        switch (vSocios.muestraMenuMSG()) {
             case "1":
-                try {
                 ArrayList<Socio> lSocios = pideSocios();
                 for (int i = 0; i < lSocios.size(); i++) {
                     vSocios.muestraSocios_Numero_Nombre(lSocios.get(i));
                 }
-            } catch (SQLException e) {
-                vMensaje.mensajeConsola("Error en la peticion: ", e.getMessage());
-            }
             break;
             case "2":
                 Socio nuevoSocio = null;
                 altaSocios(nuevoSocio);
                 break;
             case "3":
-                System.out.println("************************");
-                System.out.print("Introduce una id a eliminar: ");
-                idSocio = scanner.nextLine();
-                eliminarSocio(idSocio);
+                eliminarSocio(vSocios.eliminarSocioMSG());
                 break;
             case "4":
-                String campoAModificar,
-                 campoModificado;
-                System.out.println("************************");
-                System.out.print("Introduce una id a modificar: ");
-                idSocio = scanner.nextLine();
-                System.out.print("¿Que campo desea modificar? 1.Nombre, 2.DNI, 3.Fecha de nacimiento, 4.Telefono, 5.Correo, 6.Fecha de entrada, 7.Categoria ");
-                campoAModificar = scanner.nextLine();
-                if (null == campoAModificar) {
-                    System.out.println("Introduce un campo valido");
-                } else {
+                String campoAModificar, campoModificado;
+                idSocio = vSocios.modificarSocioMSG("id");
+                campoAModificar = vSocios.modificarSocioMSG("campoModificar");
                     switch (campoAModificar) {
-                        case "1":
-                            System.out.print("Introduce un nombre: ");
-                            campoModificado = scanner.nextLine();
-                            modificarSocio(idSocio, "nombre", campoModificado);
-                            break;
-                        case "2":
-                            System.out.print("Introduce un DNI: ");
-                            campoModificado = scanner.nextLine();
-                            modificarSocio(idSocio, "dni", campoModificado);
-                            break;
-                        case "3":
-                            System.out.print("Introduce fecha de nacimiento: ");
-                            campoModificado = scanner.nextLine();
-                            modificarSocio(idSocio, "fechaNacimiento", campoModificado);
-                            break;
-                        case "4":
-                            System.out.print("Introduce un telefono: ");
-                            campoModificado = scanner.nextLine();
-                            modificarSocio(idSocio, "telefono", campoModificado);
-                            break;
-                        case "5":
-                            System.out.print("Introduce un correo: ");
-                            campoModificado = scanner.nextLine();
-                            modificarSocio(idSocio, "correo", campoModificado);
-                            break;
-                        case "6":
-                            System.out.print("Introduce una fecha de entrada: ");
-                            campoModificado = scanner.nextLine();
-                            modificarSocio(idSocio, "fechaEntrada", campoModificado);
-                            break;
-                        case "7":
-                            System.out.print("Introduce una categoria: ");
-                            campoModificado = scanner.nextLine();
-                            modificarSocio(idSocio, "categoria", campoModificado);
-                            break;
-                        default:
-                            System.out.println("Introduce un campo valido");
-                            break;
+                        case "1" -> modificarSocio(idSocio, "nombre", vSocios.modificarSocioMSG(campoAModificar));
+                        case "2" -> modificarSocio(idSocio, "dni", vSocios.modificarSocioMSG(campoAModificar));
+                        case "3" -> modificarSocio(idSocio, "fechaNacimiento", vSocios.modificarSocioMSG(campoAModificar));
+                        case "4" -> modificarSocio(idSocio, "telefono", vSocios.modificarSocioMSG(campoAModificar));
+                        case "5" -> modificarSocio(idSocio, "correo", vSocios.modificarSocioMSG(campoAModificar));
+                        case "6" -> modificarSocio(idSocio, "fechaEntrada", vSocios.modificarSocioMSG(campoAModificar));
+                        case "7" -> modificarSocio(idSocio, "categoria", vSocios.modificarSocioMSG(campoAModificar));
                     }
-                }
                 break;
-            default:
-                throw new AssertionError();
+
+            case "5":
+                System.exit(0);
+                break;
         }
     }
 
-    private ArrayList<Socio> pideSocios() throws SQLException {
-        return socioDAO.listaSocios();
+    private ArrayList<Socio> pideSocios(){
+         ArrayList<Socio> lSocios = new ArrayList<Socio>();
+        try {
+           lSocios = socioDAO.listaSocios();
+        } catch (SQLException e) {
+            vMensaje.mensajeConsola("Error en la peticion: ", e.getMessage());
+        }
+        return lSocios;
     }
 
     private void altaSocios(Socio nuevoSocio) {
